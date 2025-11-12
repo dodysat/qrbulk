@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   qr-generator:
@@ -10,4 +10,3 @@ services:
       - CSV_FILE=sample.csv
       - OUTPUT_ZIP=/data/output.zip
     restart: "no"
-
