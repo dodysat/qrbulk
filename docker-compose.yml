@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  qr-generator:
+    build: .
+    container_name: qr-bulk-generator
+    volumes:
+      - ./sample.csv:/app/input/sample.csv:ro
+      - ./output:/app/output
+    environment:
+      - INPUT_CSV=/app/input/sample.csv
+    restart: "no"
+

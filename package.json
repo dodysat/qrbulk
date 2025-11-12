@@ -1,0 +1,15 @@
+{
+  "name": "qr-bulk-generator",
+  "version": "1.0.0",
+  "description": "Bulk QR code generator from CSV",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.3",
+    "csv-parser": "^3.0.0",
+    "archiver": "^6.0.1"
+  }
+}
+
