@@ -21,16 +21,13 @@ No build required! Just pull and run:
 # Pull the image (first time only)
 docker pull dodysat/qr-bulk-generator:latest
 
-# Generate QR codes from your CSV file
-docker run --rm -v $(pwd):/data dodysat/qr-bulk-generator:latest
+# Generate QR codes from your CSV file (replace mydata.csv with your filename)
+docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
 ```
 
 That's it! Your `output.zip` will appear in the current directory! 🎉
 
-**With a custom CSV filename:**
-```bash
-docker run --rm -v $(pwd):/data -e INPUT_CSV=/data/mydata.csv dodysat/qr-bulk-generator:latest
-```
+**Note:** Make sure your CSV file is in the current directory before running the command.
 
 ### Option 2: Using Docker Compose (For Development)
 
@@ -57,7 +54,7 @@ docker run --rm -v $(pwd):/data -e INPUT_CSV=/data/mydata.csv dodysat/qr-bulk-ge
 docker build -t qr-bulk-generator .
 
 # Run with your CSV
-docker run --rm -v $(pwd):/data qr-bulk-generator
+docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv qr-bulk-generator
 ```
 
 ### Using Node.js Directly
@@ -79,12 +76,17 @@ Your CSV file should have two columns:
 | `content` | The text/URL to encode in the QR code |
 | `filename` | The output filename (e.g., `myqr.png`) |
 
-**Example CSV:**
+**Example CSV (e.g., `mydata.csv`):**
 ```csv
 content,filename
 https://example.com/user1,user1-qr.png
 https://example.com/user2,user2-qr.png
 Contact: John Doe,contact-john.png
+```
+
+**Usage:**
+```bash
+docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
 ```
 
 **Supported column name variations:**
@@ -123,15 +125,13 @@ QRCode.toFile(outputPath, content, {
 chmod 755 output
 ```
 
-### Custom CSV Filename
-```bash
-docker run --rm -v $(pwd):/data -e INPUT_CSV=/data/my-custom.csv qr-bulk-generator
-```
-
 ### Custom Output Filename
 ```bash
-docker run --rm -v $(pwd):/data -e OUTPUT_ZIP=/data/my-qrcodes.zip qr-bulk-generator
+docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv -e OUTPUT_ZIP=/data/my-qrcodes.zip qr-bulk-generator
 ```
+
+### CSV File Not Found
+Make sure your CSV file is in the current directory where you run the docker command.
 
 ### Check Logs
 ```bash
@@ -165,11 +165,11 @@ This project includes automatic Docker Hub publishing via GitHub Actions.
 ### Using Pre-built Image from Docker Hub
 
 ```bash
-# Pull and run (assumes sample.csv in current directory)
-docker run --rm -v $(pwd):/data dodysat/qr-bulk-generator:latest
+# Basic usage - specify your CSV filename
+docker run --rm -v $(pwd):/data -e CSV_FILE=yourfile.csv dodysat/qr-bulk-generator:latest
 
-# With custom CSV filename
-docker run --rm -v $(pwd):/data -e INPUT_CSV=/data/yourfile.csv dodysat/qr-bulk-generator:latest
+# Custom output filename (optional)
+docker run --rm -v $(pwd):/data -e CSV_FILE=yourfile.csv -e OUTPUT_ZIP=/data/my-qrcodes.zip dodysat/qr-bulk-generator:latest
 ```
 
 Output will be `output.zip` in your current directory!

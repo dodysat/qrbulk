@@ -4,9 +4,20 @@ const csv = require("csv-parser");
 const QRCode = require("qrcode");
 const archiver = require("archiver");
 
-const INPUT_CSV = process.env.INPUT_CSV || "/data/sample.csv";
+const CSV_FILE = process.env.CSV_FILE;
 const OUTPUT_ZIP = process.env.OUTPUT_ZIP || "/data/output.zip";
 const QR_DIR = "/tmp/qrcodes";
+
+// Validate required CSV_FILE
+if (!CSV_FILE) {
+  console.error("❌ Error: CSV_FILE environment variable is required!");
+  console.error(
+    "📋 Usage: docker run --rm -v $(pwd):/data -e CSV_FILE=yourfile.csv dodysat/qr-bulk-generator:latest"
+  );
+  process.exit(1);
+}
+
+const INPUT_CSV = `/data/${CSV_FILE}`;
 
 // Ensure QR directory exists
 if (!fs.existsSync(QR_DIR)) {
