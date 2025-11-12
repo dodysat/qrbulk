@@ -140,6 +140,66 @@ qrbulk/
 - **archiver** - ZIP compression
 - **Node.js 18+** - Runtime environment
 
+## Docker Hub 🐳
+
+This project includes automatic Docker Hub publishing via GitHub Actions.
+
+### Using Pre-built Image from Docker Hub
+
+```bash
+# Pull the latest image
+docker pull YOUR_DOCKERHUB_USERNAME/qr-bulk-generator:latest
+
+# Run it
+docker run --rm \
+  -v $(pwd)/sample.csv:/app/input/sample.csv:ro \
+  -v $(pwd)/output:/app/output \
+  YOUR_DOCKERHUB_USERNAME/qr-bulk-generator:latest
+```
+
+### Setting Up GitHub Actions for Docker Hub
+
+To enable automatic publishing to Docker Hub:
+
+1. **Create a Docker Hub Access Token**:
+   - Go to [Docker Hub](https://hub.docker.com/)
+   - Navigate to Account Settings → Security → New Access Token
+   - Create a token with Read & Write permissions
+   - Copy the token (you won't see it again!)
+
+2. **Add GitHub Secrets**:
+   - Go to your GitHub repository → Settings → Secrets and variables → Actions
+   - Click "New repository secret" and add:
+     - Name: `DOCKERHUB_USERNAME` | Value: Your Docker Hub username
+     - Name: `DOCKERHUB_TOKEN` | Value: Your Docker Hub access token
+
+3. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Add Docker Hub publishing"
+   git push origin main
+   ```
+
+4. **Automatic Publishing**:
+   - On push to `main`/`master`: Publishes with `latest` tag
+   - On version tags (e.g., `v1.0.0`): Publishes with version tags
+   - The workflow builds for both `linux/amd64` and `linux/arm64` platforms
+
+### Creating Version Releases
+
+```bash
+# Tag a new version
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+This will automatically publish to Docker Hub with tags:
+- `v1.0.0`
+- `1.0.0`
+- `1.0`
+- `1`
+- `latest`
+
 ## License
 
 MIT License - Feel free to use and modify!
