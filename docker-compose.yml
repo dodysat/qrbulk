@@ -5,9 +5,9 @@ services:
     build: .
     container_name: qr-bulk-generator
     volumes:
-      - ./sample.csv:/app/input/sample.csv:ro
-      - ./output:/app/output
+      - .:/data
     environment:
-      - INPUT_CSV=/app/input/sample.csv
+      - INPUT_CSV=/data/sample.csv
+      - OUTPUT_ZIP=/data/output.zip
     restart: "no"
 

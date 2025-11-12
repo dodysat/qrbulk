@@ -4,17 +4,19 @@ const csv = require("csv-parser");
 const QRCode = require("qrcode");
 const archiver = require("archiver");
 
-const INPUT_CSV = process.env.INPUT_CSV || "/app/input/sample.csv";
-const OUTPUT_DIR = "/app/output";
-const QR_DIR = "/app/qrcodes";
-const ZIP_FILE = path.join(OUTPUT_DIR, "qrcodes.zip");
+const INPUT_CSV = process.env.INPUT_CSV || "/data/sample.csv";
+const OUTPUT_ZIP = process.env.OUTPUT_ZIP || "/data/output.zip";
+const QR_DIR = "/tmp/qrcodes";
 
-// Ensure directories exist
+// Ensure QR directory exists
 if (!fs.existsSync(QR_DIR)) {
   fs.mkdirSync(QR_DIR, { recursive: true });
 }
-if (!fs.existsSync(OUTPUT_DIR)) {
-  fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+
+// Ensure output directory exists
+const outputDir = path.dirname(OUTPUT_ZIP);
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir, { recursive: true });
 }
 
 console.log("🚀 QR Code Bulk Generator Started");
@@ -67,7 +69,7 @@ fs.createReadStream(INPUT_CSV)
       console.log("\n📦 Creating ZIP archive...");
       await createZipArchive();
 
-      console.log(`\n✨ Done! ZIP file created at: ${ZIP_FILE}`);
+      console.log(`\n✨ Done! ZIP file created at: ${OUTPUT_ZIP}`);
       console.log("🎉 All QR codes have been generated and zipped!");
     } catch (error) {
       console.error("❌ Error generating QR codes:", error);
@@ -81,7 +83,7 @@ fs.createReadStream(INPUT_CSV)
 
 function createZipArchive() {
   return new Promise((resolve, reject) => {
-    const output = fs.createWriteStream(ZIP_FILE);
+    const output = fs.createWriteStream(OUTPUT_ZIP);
     const archive = archiver("zip", {
       zlib: { level: 9 }, // Maximum compression
     });

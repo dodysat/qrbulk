@@ -11,8 +11,8 @@ RUN npm install --production
 # Copy application code
 COPY index.js ./
 
-# Create directories
-RUN mkdir -p /app/input /app/output /app/qrcodes
+# Create data directory
+RUN mkdir -p /data
 
 # Default command
 CMD ["npm", "start"]
