@@ -49,15 +49,35 @@ fs.createReadStream(INPUT_CSV)
 
     const outputPath = path.join(QR_DIR, filename);
 
+    // Detect image format from file extension
+    const ext = path.extname(filename).toLowerCase().replace(".", "");
+    let imageType = "png"; // default
+
+    // Map file extensions to QRCode types
+    if (ext === "jpg" || ext === "jpeg") {
+      imageType = "image/jpeg";
+    } else if (ext === "png") {
+      imageType = "png";
+    } else if (ext === "svg") {
+      imageType = "svg";
+    } else if (ext === "webp") {
+      imageType = "image/webp";
+    } else {
+      console.warn(
+        `⚠️  Unknown format '.${ext}' for ${filename}, defaulting to PNG`
+      );
+    }
+
     console.log(
-      `📝 Processing: ${filename} -> ${content.substring(0, 50)}${
-        content.length > 50 ? "..." : ""
-      }`
+      `📝 Processing: ${filename} (${imageType}) -> ${content.substring(
+        0,
+        50
+      )}${content.length > 50 ? "..." : ""}`
     );
 
     const promise = QRCode.toFile(outputPath, content, {
       errorCorrectionLevel: "H",
-      type: "png",
+      type: imageType,
       quality: 0.95,
       margin: 1,
       width: 500,

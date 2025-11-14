@@ -17,12 +17,27 @@ Generate QR codes in bulk from a CSV file, automatically zipped and ready to dow
 
 No build required! Just pull and run:
 
+**Linux/macOS (bash/zsh):**
 ```bash
 # Pull the image (first time only)
 docker pull dodysat/qr-bulk-generator:latest
 
 # Generate QR codes from your CSV file (replace mydata.csv with your filename)
 docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
+```
+
+**Windows PowerShell:**
+```powershell
+# Pull the image (first time only)
+docker pull dodysat/qr-bulk-generator:latest
+
+# Generate QR codes from your CSV file (replace mydata.csv with your filename)
+docker run --rm -v ${PWD}:/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
+```
+
+**Windows Command Prompt (CMD):**
+```cmd
+docker run --rm -v %cd%:/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
 ```
 
 That's it! Your `output.zip` will appear in the current directory! 🎉
@@ -85,8 +100,20 @@ Contact: John Doe,contact-john.png
 ```
 
 **Usage:**
+
+Linux/macOS:
 ```bash
 docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
+```
+
+Windows PowerShell:
+```powershell
+docker run --rm -v ${PWD}:/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
+```
+
+Windows CMD:
+```cmd
+docker run --rm -v %cd%:/data -e CSV_FILE=mydata.csv dodysat/qr-bulk-generator:latest
 ```
 
 **Supported column name variations:**
@@ -120,14 +147,33 @@ QRCode.toFile(outputPath, content, {
 
 ## Troubleshooting 🔧
 
-### Permission Issues
+### Windows PowerShell "invalid reference format" Error
+
+If you get this error in PowerShell, make sure to use `${PWD}` instead of `$(pwd)`:
+
+```powershell
+# ❌ Wrong (Linux syntax)
+docker run --rm -v $(pwd):/data -e CSV_FILE=DataQR.csv dodysat/qr-bulk-generator:latest
+
+# ✅ Correct (PowerShell syntax)
+docker run --rm -v ${PWD}:/data -e CSV_FILE=DataQR.csv dodysat/qr-bulk-generator:latest
+```
+
+### Permission Issues (Linux/macOS)
 ```bash
 chmod 755 output
 ```
 
 ### Custom Output Filename
+
+Linux/macOS:
 ```bash
 docker run --rm -v $(pwd):/data -e CSV_FILE=mydata.csv -e OUTPUT_ZIP=/data/my-qrcodes.zip qr-bulk-generator
+```
+
+Windows PowerShell:
+```powershell
+docker run --rm -v ${PWD}:/data -e CSV_FILE=mydata.csv -e OUTPUT_ZIP=/data/my-qrcodes.zip qr-bulk-generator
 ```
 
 ### CSV File Not Found
@@ -164,12 +210,27 @@ This project includes automatic Docker Hub publishing via GitHub Actions.
 
 ### Using Pre-built Image from Docker Hub
 
+**Linux/macOS:**
 ```bash
 # Basic usage - specify your CSV filename
 docker run --rm -v $(pwd):/data -e CSV_FILE=yourfile.csv dodysat/qr-bulk-generator:latest
 
 # Custom output filename (optional)
 docker run --rm -v $(pwd):/data -e CSV_FILE=yourfile.csv -e OUTPUT_ZIP=/data/my-qrcodes.zip dodysat/qr-bulk-generator:latest
+```
+
+**Windows PowerShell:**
+```powershell
+# Basic usage
+docker run --rm -v ${PWD}:/data -e CSV_FILE=yourfile.csv dodysat/qr-bulk-generator:latest
+
+# Custom output filename (optional)
+docker run --rm -v ${PWD}:/data -e CSV_FILE=yourfile.csv -e OUTPUT_ZIP=/data/my-qrcodes.zip dodysat/qr-bulk-generator:latest
+```
+
+**Windows CMD:**
+```cmd
+docker run --rm -v %cd%:/data -e CSV_FILE=yourfile.csv dodysat/qr-bulk-generator:latest
 ```
 
 Output will be `output.zip` in your current directory!
